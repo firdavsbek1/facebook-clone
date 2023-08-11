@@ -1,5 +1,5 @@
 # facebook-clone
-Created a Facebook Like application.
+Created a Facebook Like application.                                                                                                                                
 ----------------Concepts included in the Application-----------------
 1. Authentication & Authorization
 2. Complex degree of registeration(signup logic)
