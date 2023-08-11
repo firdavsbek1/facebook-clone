@@ -1,0 +1,156 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/form.css' %}">
+    <script src="https://kit.fontawesome.com/4a206c704d.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+<main>
+    <div class="row">
+        <div class="col-form">
+            <div class="form-container" style="width: 130%;">
+                <form action="" method="post">{% csrf_token %}
+                    <div style="margin-bottom: 1rem;color:#1c1e21;font-size: 1.2rem;font-weight: lighter;line-height: 38px;">
+                        <h1 style="margin-bottom: 0" class="fw-semibold">Sign Up</h1>
+                        <p>It's quick and easy!</p>
+                    </div>
+                    <hr>
+                    <input name="first_name" style="width: 49%;" autofocus required class="curved-field" type="text"
+                           placeholder="First name">
+                    <input name="last_name" style="width: 48%;" autofocus required class="curved-field" type="text"
+                           placeholder="Surname">
+                    <input name="user_input" required class="curved-field" type="text" placeholder="Mobile number or email address">
+                    <input name="password" required class="curved-field" type="password" placeholder="New password">
+                    <p class="text-start m-0 mt-1">Date of birth&nbsp;<i class="fa-solid fa-circle-question"></i></p>
+
+                    <div class="d-flex mb-3">
+                        <select required name="date-birth" id="date-birth" class="form-select me-2 input-sm" aria-label="Default select example" style="width: 23%">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+                        </select>
+
+                        <select required name="date-month" id="date-month" class="form-select me-2" aria-label="Default select example" style="width: 39%">
+                             <option value='1'>January</option>
+                            <option value='2'>February</option>
+                            <option value='3'>March</option>
+                            <option value='4'>April</option>
+                            <option value='5'>May</option>
+                            <option value='6'>June</option>
+                            <option value='7'>July</option>
+                            <option  value='8'>August</option>
+                            <option value='9'>September</option>
+                            <option value='10'>October</option>
+                            <option value='11'>November</option>
+                            <option value='12'>December</option>
+                        </select>
+
+                        <select required name="date-year" class="form-select" aria-label="Default select example" id="date-year" style="width: 28%">
+                        </select>
+                    </div>
+                    <p class="text-start m-0">Gender&nbsp;<i class="fa-solid fa-circle-question"></i></p>
+
+                    <div class="d-flex">
+                        <select name="gender-select" id="gender-select" class="form-select">
+                            <option selected value="N">None</option>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                            <option value="O">Other</option>
+                        </select>
+                    </div>
+
+                    <br>
+                    <button type="submit" class="btn-signup fw-semibold">Sign Up</button>
+                    <a href="{% url 'accounts:login' %}">Already have an account?</a>
+                </form>
+            </div>
+            <p><a href="#"><b>Create a Page</b></a> for a celebrity, brand or business.</p>
+        </div>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+</body>
+
+<script>
+  let dateDropdown = document.getElementById('date-year');
+  let months=["January",'February','March','April','May',"June","July","August","September",'October','November','December']
+  let currentYear = new Date().getFullYear();
+  let currentMonthIndex = new Date().getMonth();
+  let currentDate = new Date().getDate();
+  let currentMonth=months[currentMonthIndex]
+  let html_collection=document.getElementById('date-month').getElementsByTagName('option')
+  let options=Array.from(html_collection)
+  options.forEach((item,index)=>{
+      if(item.text===currentMonth.toString()){
+          item.selected=true
+      }
+  })
+
+  html_collection=document.getElementById('date-birth').getElementsByTagName('option')
+  options=Array.from(html_collection)
+  options.forEach((item,index)=>{
+      if(item.text===currentDate.toString()){
+          item.selected=true
+      }
+  })
+
+
+
+
+  let earliestYear = 1970;
+  let counter=0;
+  while (currentYear >= earliestYear) {
+    let dateOption = document.createElement('option');
+    if (counter===0){
+        dateOption.selected=true
+        counter++
+    }
+    dateOption.text = currentYear;
+    dateOption.value = currentYear;
+    dateDropdown.add(dateOption);
+    currentYear -= 1;
+  }
+</script>
+
+</html>

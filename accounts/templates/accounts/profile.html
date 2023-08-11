@@ -1,0 +1,639 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    Profile Page
+{% endblock %}
+
+{% block content %}
+
+    <div class="popop-background"></div>
+<div class="thim-div">
+    <div class="hadr-thim-bar">
+        <span id="thim-button" class="fas fa-caret-right"></span>
+
+        <p>Background</p>
+        <div class="bg-color">
+            <div id="bg-c-1" class="bg-color-1"></div>
+            <div id="bg-c-2" class="bg-color-2"></div>
+            <div id="bg-c-3" class="bg-color-3"></div>
+            <div id="bg-c-4" class="bg-color-4"></div>
+            <div id="bg-c-5" class="bg-color-5"></div>
+            <div id="bg-c-6" class="bg-color-6"></div>
+        </div>
+        <br>
+        <p>Text Color</p>
+        <div class="bg-color">
+            <div id="txt-c-1" class="bg-color-1"></div>
+            <div id="txt-c-2" class="bg-color-2"></div>
+            <div id="txt-c-3" class="bg-color-3"></div>
+            <div id="txt-c-4" class="bg-color-4"></div>
+            <div id="txt-c-5" class="bg-color-5"></div>
+            <div id="txt-c-6" class="bg-color-6"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<section class="cover-image-section">
+    <header class="cover-hader-site">
+
+        <img src="{{ user.cover_image.url }}">
+
+        <div class="cover-image-div">
+            <div class="cover-image-edite-btn">
+
+                    {% if request.user == user %}
+                        <button id="edit-image-button">
+                    <i class="fas fa-camera"></i>
+                    Edit Covar Photo
+                </button>
+                {% endif %}
+                <form id="edit-cover-image" method="post" enctype="multipart/form-data"> {% csrf_token %}
+                    <button id="file-submitter" type="submit" hidden>Submit</button>
+                </form>
+            </div>
+        </div>
+
+    </header>
+</section>
+
+<section class="profile-section">
+    <div class="profile-section-in">
+
+        <div class="profile-image-site">
+            <div class="profile-image-div">
+                <a href="#" id="profile-link">
+                    <img id="Profile_images" src="{{ user.profile_image.url }}">
+                </a>
+                <span class="fas fa-camera"></span>
+            </div>
+        </div>
+        <div class="profile-name-info" style="margin-bottom:2rem;">
+            <h1>
+                <span class="pro-txt" id="profile_name">{{ user.get_full_name}}</span>
+                <span id="nik-name"></span>
+            </h1>
+            <p style="margin:0;" class="ms-2">
+						<span class="fir-count-txt">
+							<span id="friend_count">120K</span> Friends
+						</span>
+            </p>
+
+            <div class="friends-img-div">
+
+                <div class="firend-img a">
+                    <img id="frind-image-1" src="{{ user.profile_image.url}}">
+                </div>
+
+                <div class="firend-img a">
+                    <img id="frind-image-2" src="{{ user.profile_image.url}}">
+                </div>
+
+                <div class="firend-img last-fi-div h">
+                    <img id="frind-image-8" src="{{ user.profile_image.url}}">
+                    <span class="fas fa-ellipsis-h"></span>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="profile-button-site">
+
+            <div class="btn-site-pro">
+
+                {% if request.user == user %}
+                    <span>
+							<i class="fas fa-plus-circle"></i>
+							Add to Storry
+						</span>
+                    <a href="{% url 'accounts:profile-edit' %}" style="text-decoration: none">
+                    <span class="edit-profile-btn">
+							<i class="fas fa-pen"></i>
+							Edit Profile
+						</span>
+                </a>
+                    {% elif is_friend %}
+                    <a href="{% url 'accounts:trigger-unfriend' user.pk %}" style="text-decoration: none;">
+                    <span class="danger-reqeust">
+							<i class="fa-solid fa-xmark"></i>
+							Remove Friend
+						</span>
+                </a>
+                    {% elif request_sent == -1 %}
+                    <a href="{% url 'accounts:trigger-reqeust' user.pk %}" style="text-decoration: none;">
+                    <span>
+							<i class="fa-solid fa-user-plus"></i>
+							Request Friend
+						</span>
+                </a>
+
+                    {% elif request_sent == 0 %}
+                    <a href="{% url 'accounts:trigger-accept' friend_request_to_me %}" style="text-decoration: none;">
+                    <span data-request_id="{{ friend_request_to_me }}">
+							<i class="fa-solid fa-user-plus"></i>
+							Accept Friend
+						</span>
+                </a>
+
+                    <a href="{% url 'accounts:trigger-decline' friend_request_to_me %}" style="text-decoration: none;">
+                    <span data-request_id="{{ friend_request_to_me }}" class="danger-reqeust">
+							<i class="fa-solid fa-ban"></i>
+							Decline Friend
+						</span>
+                </a>
+
+                    {% elif request_sent == 1 %}
+                    <a href="{% url 'accounts:trigger-cancel' user.id %}" style="text-decoration: none;" >
+                    <span class="danger-reqeust">
+							<i class="fa-solid fa-user-plus"></i>
+							Cancel Request
+						</span>
+                </a>
+                {% endif %}
+
+
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+<section class="full-navbar">
+    <nav class="navbar-site">
+
+        <ul compact="txt-color-c">
+            <a href="#">
+                <li class=" txt-cc activ-navbar">Posts</li>
+            </a>
+            <a href="#">
+                <li class=" txt-cc">About</li>
+            </a>
+            <a href="#">
+                <li class=" txt-cc">Friends</li>
+            </a>
+            <a href="#" id="photo-nav">
+                <li class=" txt-cc">Photo</li>
+            </a>
+            <a href="#" id="video-nav">
+                <li class=" txt-cc">Video</li>
+            </a>
+            <a href="#" id="likes-nav">
+                <li class=" txt-cc">Likes</li>
+            </a>
+            <a href="#">
+                <li class=" txt-cc">More <i class="fas fa-caret-down"></i></li>
+            </a>
+        </ul>
+
+        <div class="nav-btn">
+            <i class="fas fa-ellipsis-h"></i>
+        </div>
+
+    </nav>
+
+
+</section>
+
+
+<section class="post-section">
+    <div class="post-section-in">
+
+        <section class="info-section">
+
+{#            <div class="profile-lock-div">#}
+{#                <div class="icon-pld">#}
+{#                    <i class="fab fa-keycdn"></i>#}
+{#                </div>#}
+{#                <div class="pld-text">#}
+{#                    <h3>You locked your profile</h3>#}
+{#                    <a href="#">Learn More</a>#}
+{#                </div>#}
+{#            </div>#}
+
+            <div class="about-info">
+                <h4>Intro</h4>
+
+                <p id="bio-text">{{ user.bio}}</p>
+                <div class="bio-btn-click">
+                    <input class="input-box" type="text" value="{{ user.bio}}">
+                    <p class="length-count-txt">
+                        <span id="length-count">101</span> characters remaining</p>
+                    <div class="putlic-c-o-btn">
+                        <div>
+                            <p><span class="fas fa-globe-europe"></span> Public</p>
+                        </div>
+                        <div class="button-site-js">
+                            <button id="cencel-btn">Cencel</button>
+                            <button id="save-btn">Save</button>
+                        </div>
+                    </div>
+                </div>
+
+                {% if request.user == user %}
+                        <button id="bio-edit-btn" class="edit-bio btn">Edit Bio</button>
+                {% endif %}
+
+                <ul>
+                    <li><i class="fas fa-briefcase"></i> Works at
+                        <a href="#">{{ user.works_at}}</a>
+                    </li>
+
+                    <li><i class="fas fa-graduation-cap"></i> Went to
+                        <a href="#">{{ user.studied }}</a>
+                    </li>
+
+                    <li><i class="fas fa-home"></i> Lives in
+                        <a href="#">{{ user.lives }}</a>
+                    </li>
+
+                    <li><i class="fas fa-map-marker-alt"></i> From
+                        <a href="#">{{ user.from_location }}</a>
+                    </li>
+                    <li><i class="fas fa-heart"></i> {{ user.marriage_status }}</li>
+                    {% if user.phone_number %}
+                        <li><i class="fa-solid fa-phone"></i> {{ user.phone_number }}</li>
+                {% endif %}
+                    {% if user.email %}
+                        <li><i class="fa-solid fa-envelope-open"></i> {{ user.email }}</li>
+                {% endif %}
+                    {% if user.website %}
+                        <li><i class="fas fa-globe"></i> <a href="{{user.website}}" target="_blank">
+                        {{ user.website }}
+                    </a></li>
+                    {% endif %}
+                </ul>
+
+
+
+                {% if request.user == user %}
+                    <button class="edit-bio btn " id="open-edit-profile">Edit Details</button>
+                {% endif %}
+
+                <div class="Hobbies-show">
+                    <span><i class="fas fa-laptop-code"></i> Learning to Code</span>
+
+                    <span><i class="fas fa-laptop-code"></i>Code</span>
+
+                    <span><i class="fas fa-book"></i>Learning</span>
+
+                    <span><i class="fas fa-camera-retro"></i>Photography</span>
+                </div>
+
+
+
+                {% if request.user == user %}
+                    <button class="edit-bio btn mb-2">Edit Hobbies</button>
+                {% endif %}
+
+{#                <div class="Featured-site">#}
+{##}
+{#                    <div class="Featured-img-div">#}
+{#                        <img id="post-image-12" src="images/friends/0.jpg">#}
+{#                    </div>#}
+{##}
+{#                    <div class="Featured-img-div">#}
+{#                        <img id="post-image-11" src="images/friends/0.jpg">#}
+{#                    </div>#}
+{##}
+{#                    <div class="Featured-img-div">#}
+{#                        <img id="post-image-9" src="images/friends/0.jpg">#}
+{#                    </div>#}
+{##}
+{#                    <div class="Featured-img-div">#}
+{#                        <img id="post-image-8" src="images/friends/0.jpg">#}
+{#                    </div>#}
+{##}
+{#                </div>#}
+
+                {% if request.user == user %}
+                    <button class="edit-bio btn">Edit Featured</button>
+            {% endif %}
+            </div>
+
+{#            <div class="box-design images-site">#}
+{##}
+{#                <span>Photos</span>#}
+{##}
+{#                <div class="see-all-images"><a href="#">See All Photos</a></div>#}
+{##}
+{#                <div class="at9-images">#}
+{##}
+{#                    <div class="images-div">#}
+{#                        <img id="post-image-12" src="images/friends/0.jpg">#}
+{#                    </div>#}
+{##}
+{#                    <div class="images-div">#}
+{#                        <img id="post-image-2" src="images/friends/0.jpg">#}
+{#                    </div>#}
+{##}
+{#                    <div class="images-div">#}
+{#                        <img id="post-image-3" src="images/friends/0.jpg">#}
+{#                    </div>#}
+{##}
+{#                    <div class="images-div">#}
+{#                        <img id="post-image-4" src="images/friends/0.jpg">#}
+{#                    </div>#}
+{##}
+{#                    <div class="images-div">#}
+{#                        <img id="post-image-5" src="images/friends/0.jpg">#}
+{#                    </div>#}
+{##}
+{#                    <div class="images-div">#}
+{#                        <img id="post-image-6" src="images/friends/0.jpg">#}
+{#                    </div>#}
+{##}
+{#                    <div class="images-div">#}
+{#                        <img id="post-image-7" src="images/friends/0.jpg">#}
+{#                    </div>#}
+{##}
+{#                    <div class="images-div">#}
+{#                        <img id="post-image-8" src="images/friends/0.jpg">#}
+{#                    </div>#}
+{##}
+{#                    <div class="images-div">#}
+{#                        <img id="post-image-9" src="images/friends/0.jpg">#}
+{#                    </div>#}
+{##}
+{#                </div>#}
+{##}
+{#            </div>#}
+
+            <div class="box-design friends-site">
+
+							<span>Friends <br>
+								<p>
+									<span>
+										{{ user.friend_list.friends.all|length }}
+									</span>
+									Friend{{ user.friend_list.friends.all|length|pluralize:'s' }}
+								</p>
+							</span>
+
+                <div class="see-all-images"><a href="#">See All Friends</a></div>
+
+                <div class="at9-images">
+
+                    {% for friend in user.friend_list.friends.all %}
+
+
+                            <div class="images-div">
+                        <img id="frind-image-1" src="{{ friend.profile_image.url }}">
+                        <p> <a href="{% url 'accounts:profile' friend.id %}">{{ friend.full_name }}</a></p>
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="post-info">
+            {% if request.user == user %}
+            <div class="box-design">
+                <div class="post-upload-T">
+                    <div class="profil-ing-div">
+                        <a href="{% url 'accounts:profile' user.pk %}" id="profile-link">
+                            <img id="Profile_images" src="{{ user.profile_image.url}}">
+                        </a>
+                    </div>
+                    <div  class="text-post to-create-post">
+                        <span>What's on your mind?</span>
+                    </div>
+                </div>
+                <div class="photo-upload to-create-post">
+                    <div class="post-upl">
+                        <p><i class="fas fa-video "></i> Live Video</p>
+                    </div>
+                    <div class="post-upl to-create-post">
+                        <p><i class="fas fa-images "></i> Photo/Video</p>
+                    </div>
+                    <div class="post-upl to-create-post">
+                        <p><i class="fas fa-flag "></i> Life Event</p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+            <div class="box-design post-filter">
+
+                <div class="filter-site">
+                    <span>Posts</span>
+                    <div class="fil-ter">
+                        <button><i class="fas fa-sliders-h"></i> Filters</button>
+
+                        <button><i class="fas fa-cog"></i> Manager Posts</button>
+                    </div>
+                </div>
+
+                <div class="list-type">
+                    <div class="fil-list activ-navbar">
+                        <i class="fas fa-bars"></i> List View
+                    </div>
+                    <div class="fil-list">
+                        <i class="fas fa-th-large"></i> Grid View
+                    </div>
+                </div>
+
+            </div>
+
+
+            {% for post in posts %}
+            <!-- ************ Post ************ -->
+
+            <div class="box-design post-div">
+                <div class="post-infarmation">
+                    <div>
+                        <div class="profil-ing-div post-profile-img">
+                            <a href="#" id="profile-link">
+                                <img id="Profile_images" src="{{ post.author.profile_image.url }}">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="post-three-dot">
+                        <h2><a href="#" id="profile_name">{{ post.author.full_name }}</a></h2>
+                        <p>
+                            <a href="%">5d</a>
+                            <span>
+										<i id="public-btn-i" class="fas fa-user-friends"></i>
+                            </span>
+
+                        <div class="Select-audience">
+                            <div class="header-popap">
+                                <p class="h-pop">Select audience</p>
+                                <span id="popup-close-btn" class="fas fa-times"></span>
+                            </div>
+
+                            <div class="content-popaap">
+                                <ul>
+                                    <li id="public-btn">
+                                        <div class="icon-div">
+                                            <i class="fas fa-globe-europe"></i>
+                                        </div>
+                                        <div class="text-aria">
+                                            <h2>Public</h2>
+                                            <p>Anyone on or off Facebook</p>
+                                            <i id="public-li-icon" class="far fa-circle"></i>
+                                        </div>
+                                    </li>
+
+                                    <li class="activ-li-div" id="friends-btn">
+                                        <div class="icon-div">
+                                            <i class="fas fa-user-friends frind-icon"></i>
+                                        </div>
+                                        <div class="text-aria">
+                                            <h2>Friends</h2>
+                                            <p>Your friends on Facebook</p>
+                                            <i id="friends-li-icon" class="far fa-dot-circle activ-li-icon"></i>
+                                        </div>
+                                    </li>
+
+                                    <li id="lock-btn">
+                                        <div class="icon-div">
+                                            <i class="fas fa-lock"></i>
+                                        </div>
+                                        <div class="text-aria">
+                                            <h2 class="onlu-me">Only Me</h2>
+                                            <i id="lock-li-icon" class="far fa-circle"></i>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <span class="thre-dto-btn fas fa-ellipsis-h"></span>
+                    </div>
+                </div>
+
+                <div class="row ms-2 me-2">
+                    <p class="fw-medium">{{ post.content }}</p>
+                </div>
+                <img id="post-image-12" class="post-images" src="{{ post.post_image.url }}">
+
+                <div class="post-info-input">
+
+                    <div class="lilowow-cs">
+                        <div class="llw-count">
+                            <div class="icon-show top">
+                                <img src="{% static  "images/icon/wow.png" %}">
+                            </div>
+                            <div class="icon-show mid like-icon-bg">
+                                <i class="fas fa-thumbs-up"></i>
+                            </div>
+                            <div class="icon-show low love-icon-bg">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div><p class="l-count"><span>11</span></p></div>
+                        </div>
+
+                        <div>
+                            <p>
+                                <a href="#">1 Comments</a>
+
+                                <a href="#">1 Share</a>
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="actavite">
+                    <div class="lcs-btn lcs-btn_i">
+                        <p>
+                            <i id="post-icon-btn_i" class="far fa-thumbs-up"></i>
+                            <span id="post-icon-text_i">Like</span>
+                        </p>
+                    </div>
+                    <div class="lcs-btn">
+                        <p><i class="far fa-comment-alt"></i> Comment</p>
+                    </div>
+                    <div class="lcs-btn">
+                        <p><i class="fas fa-share"></i> Share</p>
+                    </div>
+                </div>
+
+
+                <div class="comment-site">
+                    <div class="profil-ing-div">
+                        <a href="#" id="profile-link">
+                            <img id="Profile_images" src="{{ request.user.profile_image.url }}">
+                        </a>
+                    </div>
+                    <div class="comment-input">
+                        <input type="text" placeholder="Write a comment…">
+                        <div class="comment-icon-div">
+                            <div>
+                                <i class="far fa-grin-alt"></i>
+                            </div>
+                            <div>
+                                <i class="fas fa-camera"></i>
+                            </div>
+                            <div>
+                                <img src="{% static 'images/icon/gif.jpg' %}">
+                            </div>
+                            <div>
+                                <img src="{% static 'images/icon/sticer.jpg' %}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+        {% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+        </section>
+
+    </div>
+</section>
+
+
+    <script>
+        let form=document.getElementById('edit-cover-image')
+        let input=document.createElement('input')
+        input.type='file'
+        input.name='cover_image'
+        input.hidden=true
+        form.appendChild(input)
+        let buttonImage=document.getElementById('edit-image-button')
+        buttonImage.addEventListener('click',function (){
+            input.click()
+        })
+        input.addEventListener('change',function (){
+            document.getElementById('file-submitter').click()
+        })
+
+        let openEdit=document.getElementById('open-edit-profile')
+        openEdit.addEventListener('click',function (){
+            document.location.href='http://localhost:8000/accounts/profile/edit/'
+        })
+
+
+        let toCreate=document.getElementsByClassName('to-create-post')
+        toCreateList=Array.from(toCreate)
+        toCreateList.forEach(function (item,index){
+            item.addEventListener('click',function (event){
+                document.location.href='http://localhost:8000/posts/'
+	})
+})
+    </script>
+
+
+
+{% endblock %}

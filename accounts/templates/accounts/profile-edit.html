@@ -1,0 +1,435 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Profile Edit
+{% endblock %}
+
+{% block content %}
+
+    <div class="container-fluid mt-3">
+        <div class="row flex-lg-nowrap">
+            <div class="col-12 col-lg-auto mb-3" style="width: 200px;">
+                <div class="card p-3">
+                    <div class="e-navlist e-navlist--active-bg">
+                        <ul class="nav">
+                            <li class="nav-item"><a class="nav-link px-2 active" href="{% url 'landing-page' %}"><i
+                                    class="fa-solid fa-house mr-1"></i><span>&nbsp;Home</span></a></li>
+                            <li class="nav-item"><a class="nav-link px-2" href="{% url 'accounts:profile' user.pk %}"><i
+                                    class="fa-solid fa-user"></i><span>&nbsp;Profile</span></a></li>
+                            <li class="nav-item"><a class="nav-link px-2" href="{% url 'post-create' %}"><i
+                                    class="fa-solid fa-circle-plus"></i><span>&nbsp;Create Post</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="row">
+                    <div class="col mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="e-profile">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-auto mb-3">
+                                            <div class="mx-auto" style="width: 140px;">
+                                                <div class="d-flex justify-content-center align-items-center rounded"
+                                                     style="height: 140px; background-color: rgb(233, 236, 239);">
+                                                    {% if user.profile_image %}
+                                                        <img style="width: 140px;height: 140px;"
+                                                             src="{{ user.profile_image.url }}" alt="Profile image">
+                                                    {% else %}
+                                                        <span style="color: rgb(166, 168, 170); font: bold 8pt Arial;">140x140</span>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
+                                            <div class="text-center text-sm-left mb-2 mb-sm-0">
+                                                <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap">{{ user.get_full_name }}</h4>
+                                                <p class="mb-0">@{{ user.username }}</p>
+                                                {% if last_seen %}
+                                                    <div class="text-muted"><small>Last seen {{ last_seen }}
+                                                        {{ type }}{{ last_seen|pluralize:'s' }} ago</small></div>
+                                                {% else %}
+                                                    <div class="text-muted"><small>Last
+                                                        seen {{ user.last_activity }}</small></div>
+                                                {% endif %}
+                                                <div class="mt-2" id="update-profile-pic">
+                                                    <button class="btn btn-primary" type="button">
+                                                        <i class="fa fa-fw fa-camera"></i>
+                                                        <span>Change Photo</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="text-center text-sm-right">
+
+                                                <span class="badge badge-secondary text-secondary"><i
+                                                        class="fa-solid fa-certificate" style="color: #074da0"></i>&nbsp;{{ user.role }}</span>
+                                                <div class="text-muted">
+                                                    <small>Joined {{ user.date_joined|date:"d M Y" }}</small></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item"><a href="" class="active nav-link">Settings</a></li>
+                                    </ul>
+                                    <div class="tab-content pt-3">
+                                        <div class="tab-pane active">
+                                            <form id="main-post-data" class="form" novalidate="" method="post"
+                                                  enctype="multipart/form-data">{% csrf_token %}
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="row mb-2">
+                                                            <div class="col">
+                                                                <div class="form-group">
+                                                                    <label>Full Name</label>
+                                                                    <input class="form-control" type="text" name="name"
+                                                                           placeholder="Full Name"
+                                                                           value="{{ user.get_full_name }}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col">
+                                                                <div class="form-group">
+                                                                    <label>Username</label>
+                                                                    <input class="form-control" type="text"
+                                                                           name="username" placeholder="johnny.s"
+                                                                           value="{{ user.username }}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="row mb-2">
+                                                            <div class="col">
+                                                                <div class="form-group">
+                                                                    <label>Email</label>
+                                                                    <input class="form-control" type="text" name="email"
+                                                                           placeholder="user@gmail.com"
+                                                                           value="{{ user.email }}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col">
+                                                                <div class="form-group">
+                                                                    <label>Phone number</label>
+                                                                    <input class="form-control" type="text"
+                                                                           name="phone_number" placeholder="+998768.."
+                                                                           value="{{ user.phone_number }}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        {#                        <div class="row mb-2">#}
+                                                        {#                          <div class="col">#}
+                                                        {#                            <div class="form-group">#}
+                                                        {#                              <label>Email</label>#}
+                                                        {#                              <input class="form-control" type="text" name="email" placeholder="user@example.com" value="{{ user.email }}">#}
+                                                        {#                            </div>#}
+                                                        {#                          </div>#}
+                                                        {#                        </div>#}
+                                                        <div class="row mb-2">
+                                                            <div class="col">
+                                                                <div class="form-group">
+                                                                    <label>Location</label>
+                                                                    <input class="form-control" name="from_location"
+                                                                           type="text" placeholder="You are From"
+                                                                           value="{{ user.from_location }}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mb-2">
+                                                            <div class="col">
+                                                                <div class="form-group">
+                                                                    <label>Lives</label>
+                                                                    <input class="form-control" type="text" name='lives'
+                                                                           placeholder="Place you live"
+                                                                           value="{{ user.lives }}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row mb-2">
+                                                            <div class="col">
+                                                                <div class="form-group">
+                                                                    <label>Studies</label>
+                                                                    <input class="form-control" type="text"
+                                                                           name='studied' placeholder="Place you live"
+                                                                           value="{{ user.studied }}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row mb-2">
+                                                            <div class="col">
+                                                                <div class="form-group">
+                                                                    <label>Work</label>
+                                                                    <input class="form-control" type="text"
+                                                                           name='works_at' placeholder="Place you work"
+                                                                           value="{{ user.works_at }}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="row mb-2">
+                                                            <div class="col mb-2">
+                                                                <div class="form-group">
+                                                                    <label>About</label>
+                                                                    <textarea class="form-control mt-0" name="bio"
+                                                                              rows="5"
+                                                                              placeholder="My Bio">{{ user.bio }}</textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row mb-2">
+                                                            <div class="col mb-3">
+                                                                <div class="form-group">
+                                                                    <label>Date of Birth</label>
+                                                                    <div class="d-flex mb-3">
+                                                                        <select required name="date-birth"
+                                                                                id="date-birth"
+                                                                                data-date="{{ user.date_of_birth.day }}"
+                                                                                class="form-select me-2 input-sm"
+                                                                                aria-label="Default select example"
+                                                                                style="width: 23%">
+                                                                            <option value="1">1</option>
+                                                                            <option value="2">2</option>
+                                                                            <option value="3">3</option>
+                                                                            <option value="4">4</option>
+                                                                            <option value="5">5</option>
+                                                                            <option value="6">6</option>
+                                                                            <option value="7">7</option>
+                                                                            <option value="8">8</option>
+                                                                            <option value="9">9</option>
+                                                                            <option value="10">10</option>
+                                                                            <option value="11">11</option>
+                                                                            <option value="12">12</option>
+                                                                            <option value="13">13</option>
+                                                                            <option value="14">14</option>
+                                                                            <option value="15">15</option>
+                                                                            <option value="16">16</option>
+                                                                            <option value="17">17</option>
+                                                                            <option value="18">18</option>
+                                                                            <option value="19">19</option>
+                                                                            <option value="20">20</option>
+                                                                            <option value="21">21</option>
+                                                                            <option value="22">22</option>
+                                                                            <option value="23">23</option>
+                                                                            <option value="24">24</option>
+                                                                            <option value="25">25</option>
+                                                                            <option value="26">26</option>
+                                                                            <option value="27">27</option>
+                                                                            <option value="28">28</option>
+                                                                            <option value="29">29</option>
+                                                                            <option value="30">30</option>
+                                                                        </select>
+
+                                                                        <select required name="date-month"
+                                                                                id="date-month" class="form-select me-2"
+                                                                                data-month="{{ user.date_of_birth.month }}"
+                                                                                aria-label="Default select example"
+                                                                                style="width: 39%">
+                                                                            <option value='1'>January</option>
+                                                                            <option value='2'>February</option>
+                                                                            <option value='3'>March</option>
+                                                                            <option value='4'>April</option>
+                                                                            <option value='5'>May</option>
+                                                                            <option value='6'>June</option>
+                                                                            <option value='7'>July</option>
+                                                                            <option value='8'>August</option>
+                                                                            <option value='9'>September</option>
+                                                                            <option value='10'>October</option>
+                                                                            <option value='11'>November</option>
+                                                                            <option value='12'>December</option>
+                                                                        </select>
+
+                                                                        <select required name="date-year"
+                                                                                class="form-select"
+                                                                                aria-label="Default select example"
+                                                                                data-year="{{ user.date_of_birth.year }}"
+                                                                                id="date-year" style="width: 28%">
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12 col-sm-6 mb-3">
+                                                        <div class="mb-2"><b>Change Password</b></div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <div class="form-group">
+                                                                    <label>Current Password</label>
+                                                                    <input class="form-control" name="current_password"
+                                                                           type="password" placeholder="••••••">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <div class="form-group">
+                                                                    <label>New Password</label>
+                                                                    <input class="form-control" name="password1"
+                                                                           type="password" placeholder="password">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <div class="form-group">
+                                                                    <label>Confirm <span class="d-none d-xl-inline">Password</span></label>
+                                                                    <input class="form-control" name="password2"
+                                                                           type="password"
+                                                                           placeholder="password confirmation"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-sm-5 offset-sm-1 mb-3">
+                                                        <div class="mb-2"><b>Keeping in Touch</b></div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <label>Email Notifications</label>
+                                                                <div class="custom-controls-stacked px-2">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox"
+                                                                               class="custom-control-input"
+                                                                               id="notifications-blog" checked="">
+                                                                        <label class="custom-control-label"
+                                                                               for="notifications-blog">Blog
+                                                                            posts</label>
+                                                                    </div>
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox"
+                                                                               class="custom-control-input"
+                                                                               id="notifications-news" checked="">
+                                                                        <label class="custom-control-label"
+                                                                               for="notifications-news">Newsletter</label>
+                                                                    </div>
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox"
+                                                                               class="custom-control-input"
+                                                                               id="notifications-offers" checked="">
+                                                                        <label class="custom-control-label"
+                                                                               for="notifications-offers">Personal
+                                                                            Offers</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col d-flex justify-content-end">
+                                                        <button class="btn btn-primary" type="submit">Save Changes
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-3 mb-3">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="px-xl-3">
+                                    <a href="{% url 'accounts:logout' %}">
+                                        <button class="btn btn-block btn-secondary">
+                                            <i class="fa fa-sign-out"></i>
+                                            <span>Logout</span>
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title font-weight-bold">Support</h6>
+                                <p class="card-text">Get fast, free help from our friendly assistants.</p>
+                                <button type="button" class="btn btn-primary">Contact Us</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let postForm = document.getElementById('main-post-data')
+        let profilePicture = document.getElementById('update-profile-pic')
+        profilePicture.addEventListener('click', function () {
+            newInput.click();
+        })
+        let newInput = document.createElement('input')
+
+        newInput.name = 'profile_image'
+        newInput.type = 'file'
+        newInput.hidden = true
+        postForm.appendChild(newInput)
+
+        let dateDropdown = document.getElementById('date-year');
+        let months = ["January", 'February', 'March', 'April', 'May', "June", "July", "August", "September", 'October', 'November', 'December']
+        let currentYear = new Date().getFullYear();
+        let currentMonthIndex = new Date().getMonth();
+        let currentDate = new Date().getDate();
+        let currentMonth = months[currentMonthIndex]
+        let html_collection = document.getElementById('date-month').getElementsByTagName('option')
+        let monthContainer = document.getElementById('date-month')
+        let dateContainer = document.getElementById('date-birth')
+        let yearContainer = document.getElementById('date-year')
+        let options = Array.from(html_collection)
+        options.forEach((item, index) => {
+            console.log(monthContainer.dataset.month)
+            if (item.text === months[monthContainer.dataset.month] ) {
+                item.selected = true
+            }
+        })
+
+        html_collection = document.getElementById('date-birth').getElementsByTagName('option')
+        options = Array.from(html_collection)
+        options.forEach((item, index) => {
+            if (item.text === dateContainer.dataset.date) {
+                item.selected = true
+            }
+        })
+
+        let earliestYear = 1970;
+        let counter = 0;
+        while (currentYear >= earliestYear) {
+            let dateOption = document.createElement('option');
+            if (counter === 0) {
+                dateOption.selected = true
+                counter++
+            }
+            dateOption.text = currentYear;
+            dateOption.value = currentYear;
+            dateDropdown.add(dateOption);
+            currentYear -= 1;
+        }
+
+        html_collection = document.getElementById('date-year').getElementsByTagName('option')
+        options = Array.from(html_collection)
+        options.forEach((item, index) => {
+            console.log(item.text)
+            console.log(yearContainer.dataset.year.toString())
+            if (item.text === yearContainer.dataset.year.toString()) {
+                item.selected = true
+            }
+        })
+
+
+
+    </script>
+
+{% endblock %}

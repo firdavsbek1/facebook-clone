@@ -1,0 +1,47 @@
+{% url 'landing-page' as landing_page_url %}
+<div class="header">
+      <div class="header__left">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Facebook_f_logo_%282019%29.svg/1200px-Facebook_f_logo_%282019%29.svg.png"
+          alt=""
+        />
+        <div class="header__input">
+          <span class="material-icons"> search </span>
+          <input type="text" placeholder="Search Facebook" />
+        </div>
+      </div>
+
+      <div class="header__middle">
+        <div class="header__option {% if request.path == landing_page_url %}active{% endif %}">
+            <a href="{% url 'landing-page' %}"><span class="material-icons"> home </span></a>
+        </div>
+          <div class="header__option">
+          <span class="material-icons"> supervised_user_circle </span>
+        </div>
+        <div class="header__option">
+          <span class="material-icons"> flag </span>
+        </div>
+        <div class="header__option">
+          <span class="material-icons"> subscriptions </span>
+        </div>
+        <div class="header__option">
+          <span class="material-icons"> storefront </span>
+        </div>
+
+      </div>
+
+      <div class="header__right">
+        <a href="{% url 'accounts:profile' request.user.pk %}"><div class="header__info">
+          <img
+            class="user__avatar"
+            alt=""
+            src="{{ request.user.profile_image.url }}"
+          /></a>
+          <h4>{{ request.user.first_name}}</h4>
+        </div>
+    <a style="text-decoration: none" href="{% url 'post-create' %}"><span class="material-icons"> add </span></a>
+        <span class="material-icons"> forum </span>
+        <span class="material-icons"> notifications_active </span>
+        <span class="material-icons"> expand_more </span>
+      </div>
+    </div>

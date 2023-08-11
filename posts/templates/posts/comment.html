@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>
+        {% if edit %}
+            Comment Edit
+        {% else %}
+            Comment Create
+
+        {% endif %}
+    </title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/4a206c704d.js" crossorigin="anonymous"></script>
+
+    <style>
+body {
+    background-color: #eee;
+
+}
+
+.bdge {
+  height: 21px;
+  background-color: orange;
+  color: #fff;
+  font-size: 11px;
+  padding: 8px;
+  border-radius: 4px;
+  line-height: 3px;
+}
+
+.comments {
+  text-decoration: underline;
+  text-underline-position: under;
+  cursor: pointer;
+}
+
+.dot {
+  height: 7px;
+  width: 7px;
+  margin-top: 3px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.hit-voting:hover {
+  color: blue;
+}
+
+.hit-voting {
+  cursor: pointer;
+}
+a{
+    color: #343435;
+}
+a:hover{
+    color: rgba(0, 89, 255, 0.95);
+}
+    </style>
+</head>
+
+<body>
+
+<div class="container mt-5 mb-5">
+
+    <div class="d-flex justify-content-center row">
+        <div class="d-flex flex-column col-md-8">
+            <div class="d-flex flex-row align-items-center text-left comment-top p-2 bg-white border-bottom px-4">
+                {% if edit %}
+                    <a class="btn"  style="text-decoration: none;margin-right:5rem;" href="{% url 'comment-create' post.id %}"><i class="fa-solid fa-angle-left fa-2x "></i></a>
+                {% else %}
+                    <a class="btn"  style="text-decoration: none;margin-right:5rem;" href="{% url 'landing-page' %}"><i class="fa-solid fa-angle-left fa-2x "></i></a>
+                {% endif %}
+
+                    <div class="profile-image"><img class="rounded-circle" src="{{ post.author.profile_image.url }}" width="70"></div>
+                    <div class="d-flex flex-column-reverse flex-grow-0 align-items-center votings me-2 ms-1"><i class="fa fa-sort-up fa-2x hit-voting"></i><span>127</span><i class="fa fa-sort-down fa-2x hit-voting"></i></div>
+                    <div class="d-flex flex-column ml-3">
+                        <div class="d-flex flex-row post-title">
+                            <h5>{{ post.content|truncatechars:'50'}}</h5><span class="ml-2">({{ post.author.username }})</span></div>
+                        <div class="d-flex flex-row align-items-center align-content-center post-title"><span class="bdge mr-1">video</span><span class="mr-2 comments">&nbsp;{{ comments|length }} comment{{ comments|length|pluralize:'s' }}&nbsp;</span><span class="me-1 ms-1  dot"></span><span>{{ post.created_time|date:'d M Y' }}</span></div>
+                    </div>
+                </div>
+                <div class="coment-bottom bg-white p-2 px-4">
+
+                    <form method="post" class="d-flex flex-row add-comment-section mt-4 mb-4">
+                        <img class="img-fluid img-responsive rounded-circle mr-2" src="{{ request.user.profile_image.url}}" width="38">
+                    {% csrf_token %}
+                     <input name="comment" type="text" class="form-control ms-3" placeholder="Add comment"
+                     {% if edit %}value="{{ comment.comment }}"{% endif %}>
+{#                        <textarea class="form-control ms-3" placeholder="Add Comment" name="comment" id="" cols="20" rows="2"></textarea>#}
+                        <button class="btn btn-primary ms-1" type="submit">{% if edit %}Save{% else %}Comment{% endif %}</button>
+                    </form>
+
+                   {% for review in comments %}
+                    <div
+                        class="commented-section mt-2">
+                        <div class="d-flex flex-row align-items-center commented-user">
+                            <a style="text-decoration: none;" href="{% url 'accounts:profile' review.author.id %}"><h5 class="mr-2">{{ review.author.full_name}}</h5></a><span class="dot mb-1 ms-2 me-1"></span><span class="mb-1 ms-1 me-1">{{ review.created_time|date:"d M Y"}}</span>
+
+                                {% if request.user == review.author and not edit %}
+                            <div style="margin-left: 2rem;">
+
+                                <a href="{% url 'comment-delete' review.id  %}"><span class="ms-1 me-1 text-danger"><i class="fa-solid fa-trash fa-lg"></i></span></a>
+                                <a href="{% url 'comment-edit' review.id  %}"><span class="ms-1 me-1 text-primary"><i class="fa-solid fa-pen-to-square fa-lg"></i></span></a>
+                                </div>
+                            {% endif %}
+</div>
+                        <div class="comment-text-sm"><span>{{ review.comment }}</span></div>
+                        <div
+                            class="reply-section">
+                            <div class="d-flex flex-row align-items-center voting-icons"><a class="text-dark" href="#"><i class="fa fa-sort-up fa-2x mt-3 hit-voting"></i></a>
+                                <a class="text-dark" href="#"><i class="fa fa-sort-down fa-2x mb-3 hit-voting"></i></a><span class="ms-2">10</span><span class="dot ms-1 me-1"></span>
+                                <h6 class="btn ml-2 mt-1" id="reply-to" data-parent="{{ review.id }}">Reply</h6>
+                            </div>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+    </div>
+    </div>
+    </div>
+
+</body>
+
+<script>
+</script>
+
+</html>

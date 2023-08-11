@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Create Post
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="wrapper">
+            <section class="post">
+                <header>
+                    <div id="cancel-create" class="arrow-back" style="display:inline-block;alignment: left"><i class="fas fa-arrow-left "></i>
+                    </div>
+
+                    <p style="display: inline-block;margin-left:8rem;margin-right: 10rem;">Create Post</p>
+                </header>
+                <form id="post-form" action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+                    <div class="content">
+                        <img style="border-radius: 50%" src="{{ request.user.profile_image.url }}" alt="logo">
+                        <div class="details">
+                            {% if request.user.full_name %}
+                                <p>{{ request.user.full_name }}</p>
+                                {% else %}
+                                <p>{{ request.user.username }}</p>
+                            {% endif  %}
+                            <div class="privacy">
+                                <i class="fas fa-user-friends"></i>
+                                <span>Friends</span>
+                                <i class="fas fa-caret-down"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <textarea name="content" placeholder="What's on your mind, MyAccount?" spellcheck="false" required></textarea>
+                    <div class="theme-emoji">
+                        <img src="{% static 'images/icons/theme.svg' %}" alt="theme">
+                        <img src="{% static 'images/icons/smile.svg' %}" alt="smile">
+                    </div>
+                    <div class="options">
+                        <p>Add to Your Post</p>
+                        <ul class="list">
+                            <li><img id="choose-image" src="{% static 'images/icons/gallery.svg' %}" alt="gallery"></li>
+                            <li><img src="{% static 'images/icons/tag.svg' %}" alt="gallery"></li>
+                            <li><img src="{% static 'images/icons/emoji.svg' %}" alt="gallery"></li>
+                            <li><img src="{% static 'images/icons/mic.svg' %}" alt="gallery"></li>
+                            <li><img src="{% static 'images/icons/more.svg' %}" alt="gallery"></li>
+                        </ul>
+                    </div>
+                    <button>Post</button>
+                </form>
+            </section>
+            <section class="audience">
+                <header>
+                    <div class="arrow-back"><i class="fas fa-arrow-left"></i></div>
+                    <p>Select Audience</p>
+                </header>
+                <div class="content">
+                    <p>Who can see your post?</p>
+                    <span>Your post will show up in News Feed, on your profile and in search results.</span>
+                </div>
+                <ul class="list">
+                    <li>
+                        <div class="column">
+                            <div class="icon"><i class="fas fa-globe-asia"></i></div>
+                            <div class="details">
+                                <p>Public</p>
+                                <span>Anyone on or off Facebook</span>
+                            </div>
+                        </div>
+                        <div class="radio"></div>
+                    </li>
+                    <li class="active">
+                        <div class="column">
+                            <div class="icon"><i class="fas fa-user-friends"></i></div>
+                            <div class="details">
+                                <p>Friends</p>
+                                <span>Your friends on Facebook</span>
+                            </div>
+                        </div>
+                        <div class="radio"></div>
+                    </li>
+                    <li>
+                        <div class="column">
+                            <div class="icon"><i class="fas fa-user"></i></div>
+                            <div class="details">
+                                <p>Specific</p>
+                                <span>Only show to some friends</span>
+                            </div>
+                        </div>
+                        <div class="radio"></div>
+                    </li>
+                    <li>
+                        <div class="column">
+                            <div class="icon"><i class="fas fa-lock"></i></div>
+                            <div class="details">
+                                <p>Only me</p>
+                                <span>Only you can see your post</span>
+                            </div>
+                        </div>
+                        <div class="radio"></div>
+                    </li>
+                    <li>
+                        <div class="column">
+                            <div class="icon"><i class="fas fa-cog"></i></div>
+                            <div class="details">
+                                <p>Custom</p>
+                                <span>Include and exclude friends</span>
+                            </div>
+                        </div>
+                        <div class="radio"></div>
+                    </li>
+                </ul>
+            </section>
+
+
+        </div>
+    </div>
+
+    <script>
+        const container = document.querySelector(".container"),
+            privacy = container.querySelector(".post .privacy"),
+            arrowBack = container.querySelector(".audience .arrow-back");
+
+        privacy.addEventListener("click", () => {
+            container.classList.add("active");
+        });
+
+        arrowBack.addEventListener("click", () => {
+            container.classList.remove("active");
+        });
+        let input = document.createElement('input');
+        input.type = 'file';
+        input.name='photo';
+        input.hidden=true;
+        let galleryIcon=document.getElementById('choose-image')
+        galleryIcon.addEventListener('click',function (event){
+            input.click();
+        })
+        let form=document.getElementById('post-form')
+        form.appendChild(input)
+
+        let cancel=document.getElementById('cancel-create')
+        cancel.addEventListener('click',e=>{
+            document.location.href='http://localhost:8000/'
+        })
+    </script>
+
+{% endblock %}
