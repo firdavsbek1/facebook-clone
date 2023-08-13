@@ -78,7 +78,7 @@ class CustomUser(AbstractUser):
 
 class FriendList(models.Model):
     user=models.OneToOneField(CustomUser,on_delete=models.CASCADE,related_name='friend_list')
-    friends=models.ManyToManyField(CustomUser,null=True,blank=True,related_name='friends')
+    friends=models.ManyToManyField(CustomUser,related_name='friends')
 
     def __str__(self):
         return self.user.username

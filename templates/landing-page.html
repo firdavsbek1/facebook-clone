@@ -17,7 +17,7 @@
                         src="{{ request.user.profile_image.url }}"
                         alt=""
                 />
-                <h4 >{{ request.user.last_name}} {{ request.user.first_name }}</h4>
+                <h4>{{ request.user.last_name }} {{ request.user.first_name }}</h4>
             </div>
 
             <div class="sidebarRow">
@@ -61,16 +61,16 @@
         <div class="feed">
             <div class="storyReel">
                 <!-- story starts -->
-                {% for char in 'fourfiveaaaa' %}
-                <div
-                        style="background-image: url('https://images.unsplash.com/photo-1504730030853-eff311f57d3c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Z2lybCUyMG9uJTIwc2VsZmllfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60');"
-                        class="story">
-                    <img
-                            class="user__avatar story__avatar"
-                            src="{{ request.user.profile_image.url }}"
-                            alt=""/>
-                    <h4>{{ request.user.last_name}} {{ request.user.first_name }}</h4>
-                </div>
+                {% for story in stories %}
+                    <a href="{% url 'accounts:profile' story.user.id %}"><div
+                            style="background-image: url('{{ story.story_image.url }}');"
+                            class="story">
+                        <img
+                                class="user__avatar story__avatar"
+                                src="{{ story.user.profile_image.url }}"
+                                alt=""/>
+                        <h4>{{ story.user.last_name }} {{ story.user.first_name }}</h4>
+                    </div></a>
                 {% endfor %}
                 <!-- story ends -->
             </div>
@@ -81,15 +81,15 @@
                     <img
                             class="user__avatar"
                             src={{ user.profile_image.url }}
-                            alt=""
+                                    alt=""
                     />
                     <form>
-                        <input style="text-align: left" class="messageSender__input" id="message-sender" value="What's on your mind?" type="button"
-                                role="button"/>
+                        <input style="text-align: left" class="messageSender__input" id="message-sender"
+                               value="What's on your mind?" type="button"
+                               role="button"/>
 
 
                     </form>
-
 
 
                 </div>
@@ -113,50 +113,50 @@
             </div>
             <!-- message sender ends -->
             {% for post in posts %}
-            <!-- post starts -->
-            <div class="post">
-                <div class="post__top">
-                    <a href="{% url 'accounts:profile' post.author.id %}"><img
-                            class="user__avatar post__avatar"
-                            src={{ post.author.profile_image.url }}
-                            alt=""
-                    /></a>
-                    <div class="post__topInfo">
-                        <h3>{{ post.author.get_full_name }}</h3>
-                        <p>{{ post.created_time|date:'M ,d Y'}}</p>
+                <!-- post starts -->
+                <div class="post">
+                    <div class="post__top">
+                        <a href="{% url 'accounts:profile' post.author.id %}"><img
+                                class="user__avatar post__avatar"
+                                src={{ post.author.profile_image.url }}
+                                        alt=""
+                        /></a>
+                        <div class="post__topInfo">
+                            <h3>{{ post.author.get_full_name }}</h3>
+                            <p>{{ post.created_time|date:'M ,d Y' }}</p>
+                        </div>
+                    </div>
+
+                    <div class="post__bottom">
+                        <p>{{ post.content|linebreaks }}</p>
+                    </div>
+
+                    <div class="post__image">
+                        {% if post.post_image %}
+                            <img class="image-fit" src="{{ post.post_image.url }}" alt="">
+                        {% endif %}
+                    </div>
+
+                    <div class="post__options">
+                        <div class="post__option post-like" data-post="{{ post.id }}">
+                            <span class="material-icons {% if post in posts_liked %}text-danger{% else %}{% endif %}"> thumb_up </span>
+                            <p>Like</p>
+                        </div>
+                        <a style="text-decoration: none" href="{% url 'comment-create' post.id %}">
+                            <div class="post__option">
+                                <span class="material-icons"> chat_bubble_outline </span>
+                                <p>Comment</p>
+
+                            </div>
+                        </a>
+
+                        <div class="post__option">
+                            <span class="material-icons"> near_me </span>
+                            <p>Share</p>
+                        </div>
                     </div>
                 </div>
-
-                <div class="post__bottom">
-                    <p>{{ post.content|linebreaks }}</p>
-                </div>
-
-                <div class="post__image">
-                   {% if post.post_image %}
-                        <img class="image-fit" src="{{ post.post_image.url }}" alt="">
-                    {% endif %}
-                </div>
-
-                <div class="post__options">
-                    <div class="post__option">
-                        <span class="material-icons"> thumb_up </span>
-                        <p>Like</p>
-                    </div>
-            <a style="text-decoration: none" href="{% url 'comment-create' post.id %}">
-                    <div class="post__option">
-                        <span class="material-icons"> chat_bubble_outline </span>
-                        <p >Comment</p>
-
-                    </div>
-      </a>
-
-                    <div class="post__option">
-                        <span class="material-icons"> near_me </span>
-                        <p>Share</p>
-                    </div>
-                </div>
-            </div>
-            <!-- post ends -->
+                <!-- post ends -->
             {% endfor %}
         </div>
         <!-- feed ends -->
@@ -173,15 +173,15 @@
                     data-hide-cover="false"
                     data-show-facepile="true"
             >
-{#                <blockquote cite="https://www.facebook.com/facebook" class="fb-xfbml-parse-ignore">#}
-{#                    <a href="https://www.facebook.com/facebook">Facebook</a>#}
-{#                </blockquote>#}
-            <p class="mt-2 ms-2"><a href="#" style="text-decoration: none;">Place Your Ads</a></p>
+                {#                <blockquote cite="https://www.facebook.com/facebook" class="fb-xfbml-parse-ignore">#}
+                {#                    <a href="https://www.facebook.com/facebook">Facebook</a>#}
+                {#                </blockquote>#}
+                <p class="mt-2 ms-2"><a href="#" style="text-decoration: none;">Place Your Ads</a></p>
                 {% for _ in '1,2,3,4,5' %}
                     <div class="m-2 mb-4">
-                    <img style="max-width: 300px;max-height: 300px;filter: blur(5px);
+                        <img style="max-width: 300px;max-height: 300px;filter: blur(5px);
   -webkit-filter: blur(5px);" src="{% static 'images/add-defualt.webp' %}" alt="">
-                </div>
+                    </div>
                 {% endfor %}
             </div>
         </div>
@@ -192,10 +192,20 @@
 
 
     <script>
-        let toProfile=document.getElementById('to-profile-page')
-        let m=toProfile.dataset.user
-        toProfile.addEventListener('click',function (event){
-                document.location.href='http://localhost:8000/accounts/'+m.toString()+'/profile/'
+        let toProfile = document.getElementById('to-profile-page')
+        let m = toProfile.dataset.user
+        toProfile.addEventListener('click', function (event) {
+            document.location.href = 'http://localhost:8000/accounts/' + m.toString() + '/profile/'
+        })
+
+        let postLike = document.getElementsByClassName('post-like')
+        postLike = Array.from(postLike)
+        postLike.forEach(function (item, index) {
+            console.log(item)
+            item.addEventListener('click', function () {
+                let path=`http://127.0.0.1:8000/posts/${item.dataset.post}/like/`
+                document.location.href=path
+            })
         })
 
     </script>
