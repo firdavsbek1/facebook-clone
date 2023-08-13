@@ -1,3 +1,4 @@
+import datetime
 import uuid
 from django.db import models
 from django.db.models import UniqueConstraint
@@ -94,4 +95,10 @@ class Story(models.Model):
     user=models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name='stories')
     story_image=models.ImageField(upload_to='images/story/images/',null=True,blank=True)
     created_time=models.DateTimeField(auto_now_add=True)
+    expiration_time=models.DateTimeField(null=True,blank=True,editable=False)
+
+    def save(self,*args,**kwargs):
+        if self._state.adding:
+            self.expiration_time=datetime.datetime.now()+datetime.timedelta(days=1)
+        return super().save(*args,**kwargs)
 
