@@ -114,17 +114,32 @@
 						</span>
                 </a>
                     {% elif is_friend %}
+
                     <a href="{% url 'accounts:trigger-unfriend' user.pk %}" style="text-decoration: none;">
                     <span class="danger-reqeust">
 							<i class="fa-solid fa-xmark"></i>
 							Remove Friend
 						</span>
                 </a>
+
+                    <a href="{% url 'message-to' user.pk %}" style="text-decoration: none;">
+                    <span>
+							<i class="fa-solid fa-paper-plane"></i>
+							Message
+						</span>
+                </a>
+
                     {% elif request_sent == -1 %}
                     <a href="{% url 'accounts:trigger-reqeust' user.pk %}" style="text-decoration: none;">
                     <span>
 							<i class="fa-solid fa-user-plus"></i>
 							Request Friend
+						</span>
+                </a>
+                    <a href="{% url 'message-to' user.pk %}" style="text-decoration: none;">
+                    <span>
+							<i class="fa-solid fa-paper-plane"></i>
+							Message
 						</span>
                 </a>
 

@@ -31,6 +31,7 @@ urlpatterns = [
     path('', landing_page, name='landing-page'),
     path('accounts/', include('accounts.urls')),
     path('posts/', include('posts.urls')),
+    path('messages/',include('messages_app.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,258 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Facebook Messenger</title>
+
+
+    <link rel="stylesheet" href="{% static 'messages_app/message-style.css' %}">
+    <link rel="stylesheet" href="{% static 'messages_app/normalize.css' %}">
+    <script src="https://kit.fontawesome.com/4a206c704d.js" crossorigin="anonymous"></script>
+
+
+</head>
+
+<body>
+
+
+<div class="wrapper-mobile">
+
+
+    <div class="mobile"><img src="{% static 'messages_app/img/lone-logo.svg' %}">Not available on Tablet or Mobile
+        devices.
+    </div>
+
+</div>
+
+
+<div class="wrapper">
+
+    <header>
+
+        <div class="container">
+
+            <div class="left"><img src="{% static 'messages_app/img/logo.svg' %}"></div>
+
+            <div class="middle">
+                <h3>{{ current_user.full_name }}</h3>
+                <p>Messenger</p>
+            </div>
+
+
+            <div class="right">
+
+                <div class="username">
+                    <div class="settings"><img src="{% static 'messages_app/img/settings.svg' %}"></div>
+                    {{ current_user.get_full_name }}
+                </div>
+
+                <div class="avatar"><img src="{{ current_user.profile_image.url }}"></div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <div class="col-left">
+
+            <div class="col-content">
+
+                <div class="messages">
+
+                    {% for friend in friends %}
+                        {% if  friend != request.user %}
+                        <a style="text-decoration: none" href="{% url 'message-to' friend.id %}">
+                        <li>
+
+
+                            <div class="avatar">
+                                <div class="avatar-image">
+                                    <div class="status online"></div>
+                                    <img src="{{ friend.profile_image.url }}"></div>
+                            </div>
+                            <h3>{{ friend.get_full_name }}</h3>
+                            <p>{{ friend.username }}</p>
+
+                        </li>
+                        </a>
+                        {% endif %}
+                    {% endfor %}
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col">
+
+            <div class="col-content">
+
+
+                <section class="message">
+                    <div class="grid-message">
+                        <div class="col-message-received">
+                            <div class="message-received">
+                                <p>Ok.</p>
+                            </div>
+                            <div class="message-received">
+                                <p>Do you play EVE Online?</p>
+                            </div>
+                        </div>
+                        <div class="col-message-sent">
+                            <div class="message-sent">
+                                <p>Not anymore.</p>
+                            </div>
+                        </div>
+                        <div class="col-message-received">
+                            <div class="message-received">
+
+                                <p>But, can you?</p>
+                            </div>
+                        </div>
+                        <div class="col-message-sent">
+                            <div class="message-sent">
+                                <p>I guess if I had some practice I could again. It's been years.</p>
+                            </div>
+                        </div>
+                        <div class="col-message-received">
+                            <div class="message-received">
+                                <p>Dat titan though...</p>
+                            </div>
+                        </div>
+                        <div class="col-message-sent">
+                            <div class="message-sent">
+                                <p>Trombone, guitar, titan?</p>
+                            </div>
+                        </div>
+                        <div class="col-message-received">
+                            <div class="message-received">
+                                <p>Niiiiice.</p>
+                            </div>
+                        </div>
+                        <div class="col-message-sent">
+                            <div class="message-sent">
+                                <div class="">
+                                    <p>Do you care if I use the last few minutes of our conversation as dummy text for
+                                        this thing I'm coding?</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-message-received">
+                            <div class="message-received">
+                                <p>Sure go ahead.</p>
+                            </div>
+                        </div>
+                        <div class="col-message-sent">
+                            <div class="message-sent">
+                                <p>Okay.</p>
+                            </div>
+                            <div class="message-sent">
+                                <p>I'll send you some ISK when I'm done.</p>
+                            </div>
+                            <div class="message-sent">
+                                <p>It's cool.</p>
+                            </div>
+                        </div>
+                        <div class="col-message-received">
+                            <div class="message-received">
+                                <p>Ok.</p>
+                            </div>
+                            <div class="message-received">
+                                <p>Do you play EVE Online?</p>
+                            </div>
+                        </div>
+                        <div class="col-message-sent">
+                            <div class="message-sent">
+                                <p>Not anymore.</p>
+                            </div>
+                        </div>
+                        <div class="col-message-received">
+                            <div class="message-received">
+                                <p>But, can you?</p>
+                            </div>
+                        </div>
+                        <div class="col-message-sent">
+                            <div class="message-sent">
+                                <p>I guess if I had some practice I could again. It's been years.</p>
+                            </div>
+                        </div>
+                        {% for message in messages.all %}
+                            {% if message.is_owner %}
+                                <div class="col-message-sent">
+                                    <div class="message-sent">
+                                        <p>{{ message.content }}</p>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="col-message-received">
+                                    <div class="message-received">
+                                        <p>{{ message.content }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+
+                    </div>
+                </section>
+
+            </div>
+
+
+            <div class="col-foot">
+
+                <div class="compose">
+                    <form action="" method="post">
+                        {% csrf_token %}
+
+                        <input name="content" placeholder="Type a message">
+                        <div class="compose-dock">
+                            <div class="dock">
+                                <button style="border:none;background: transparent;font-size: 1.3rem;">
+                                    <i class="fa-solid fa-paper-plane fa-xl" style="color:rgba(0,89,255,0.95);"></i>
+                                </button>
+                                <img src="{% static 'messages_app/img/picture.svg' %}"><img
+                                    src="{% static 'messages_app/img/smile.svg' %}"></div>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-right">
+
+            <div class="col-content">
+
+                <div class="user-panel">
+
+                    <div class="avatar">
+                        <div class="avatar-image">
+                            <div class="status online"></div>
+                            <img src="{{ to_user.profile_image.url }}"></div>
+
+                        <h3>{{ to_user.get_full_name }}</h3>
+                        <p>{{ to_user.from_location }}</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+</div>
+
+
+</body>
+
+</html>

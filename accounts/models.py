@@ -39,6 +39,9 @@ class CustomUser(AbstractUser):
     website=models.CharField(max_length=200,null=True,blank=True)
     cover_image=models.ImageField(upload_to='accounts/images/',default='accounts/images/default-cover.svg')
 
+    # for messaging
+    last_message_time=models.DateTimeField(null=True,blank=True)
+
     def validate_username(self, new_username):
         if self.username != new_username:
             user = CustomUser.objects.filter(username__iexact=new_username)
