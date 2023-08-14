@@ -23,7 +23,11 @@ def landing_page(request):
         user__in=queryset,
         expiration_time__gte=datetime.datetime.now()).order_by('-created_time')
     return render(request, 'landing-page.html',
-                  {'posts': posts, 'posts_liked': posts_liked, 'stories': stories})
+                  {'posts': posts,
+                   'posts_liked': posts_liked,
+                   'stories': stories,
+                   'friend':user.friend_list.friends.all().order_by('-last_message_time').first()
+                   })
 
 
 urlpatterns = [

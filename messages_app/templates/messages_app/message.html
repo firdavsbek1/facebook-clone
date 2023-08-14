@@ -33,7 +33,9 @@
 
         <div class="container">
 
-            <div class="left"><img src="{% static 'messages_app/img/logo.svg' %}"></div>
+            <a href="{% url 'landing-page' %}">
+                 <div class="left"><img src="{% static 'images/fb_logo.svg' %}"></div>
+            </a>
 
             <div class="middle">
                 <h3>{{ current_user.full_name }}</h3>

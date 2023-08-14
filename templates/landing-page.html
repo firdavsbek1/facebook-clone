@@ -35,10 +35,12 @@
                 <h4>People</h4>
             </div>
 
-            <div class="sidebarRow">
+            <a href="{% url 'message-to' friend.id  %}" style="text-decoration: none;color: inherit;">
+                <div class="sidebarRow">
                 <span class="material-icons"> chat </span>
                 <h4>Messenger</h4>
             </div>
+            </a>
 
             <div class="sidebarRow">
                 <span class="material-icons"> storefront </span>
