@@ -1,4 +1,5 @@
 import datetime
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from accounts.models import CustomUser
 from messages_app.forms import MessageForm
@@ -6,7 +7,7 @@ from messages_app.models import Message
 from django.db.models import Q
 
 
-# Create your views here.
+@login_required
 def message(request, user_id):
     to_user = CustomUser.objects.get(id=user_id)
 
