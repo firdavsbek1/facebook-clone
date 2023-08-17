@@ -77,7 +77,7 @@ class CustomUser(AbstractUser):
 
     def set_username(self):
         if self.username == self.first_name.lower()+'default':
-            self.username = f"{self.username}-{uuid.uuid4()[:10]}"
+            self.username = f"{str(self.username).replace('default','')}-{uuid.uuid4()[:10]}"
             self.save()
 
     def clean(self):
