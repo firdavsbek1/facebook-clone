@@ -25,7 +25,7 @@ application.
 6. All authentication system is built on hand(custom)
 ___
 
-                                                    Image Based Overview of the project
+                                    Image Based Overview of the project
 
 ___
 
