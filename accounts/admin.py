@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser,FriendList,FriendRequest
+from .models import CustomUser,FriendList,FriendRequest,CodeVerification
 
 
 class CustomUserAdmin(admin.ModelAdmin):
@@ -9,3 +9,4 @@ class CustomUserAdmin(admin.ModelAdmin):
 admin.site.register(CustomUser,CustomUserAdmin)
 admin.site.register(FriendList)
 admin.site.register(FriendRequest)
+admin.site.register(CodeVerification)

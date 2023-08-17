@@ -1,12 +1,14 @@
+import random
 import uuid
-from datetime import timezone
 
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
 
 NOT_SPECIFIED, MALE, FEMALE, OTHER = ('N', 'M', 'F', 'O')
 ORDINARY, ADMIN, ADMINISTRATOR, SUPERUSER = ('ORDINARY', 'ADMIN', 'ADMINISTRATOR', 'SUPERUSER')
+VIA_EMAIL,VIA_PHONE=('EMAIL','PHONE')
 
 GENDER = (
     (NOT_SPECIFIED, "Not specified"),
@@ -23,12 +25,20 @@ ROLES = (
 )
 
 
+AUTH_TYPE = (
+    (VIA_EMAIL, "via_email"),
+    (VIA_PHONE, "via_phone"),
+)
+
+
 class CustomUser(AbstractUser):
     phone_number = models.CharField(max_length=18, null=True)
     profile_image = models.ImageField(default='accounts/images/user-default.png', upload_to='accounts/images/')
     date_of_birth = models.DateField(null=True)
     gender = models.CharField(max_length=1, choices=GENDER, default=OTHER)
     role = models.CharField(max_length=16, choices=ROLES, default=ORDINARY)
+    auth_type=models.CharField(max_length=15,choices=AUTH_TYPE,default=VIA_EMAIL)
+    is_verified=models.BooleanField(default=False)
 
     from_location = models.CharField(max_length=200, null=True, blank=True)
     lives = models.CharField(max_length=200, null=True, blank=True)
@@ -41,6 +51,15 @@ class CustomUser(AbstractUser):
 
     # for messaging
     last_message_time=models.DateTimeField(null=True,blank=True)
+
+    def get_verification_code(self):
+        code="".join([str(random.randint(1,100)//10) for _ in range(6)])
+        CodeVerification.objects.create(
+            user=self,
+            code=code,
+            expiration_time=timezone.now()+timezone.timedelta(minutes=5)
+        )
+        return code
 
     def validate_username(self, new_username):
         if self.username != new_username:
@@ -77,6 +96,13 @@ class CustomUser(AbstractUser):
     # id=models.UUIDField(default=uuid.uuid4(),primary_key=True)
     last_activity = models.DateTimeField(auto_now_add=True, null=True)
     updated_time = models.DateTimeField(auto_now=True, null=True)
+
+
+class CodeVerification(models.Model):
+    user=models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name='codes')
+    code=models.CharField(max_length=6)
+    expiration_time=models.DateTimeField(null=True,blank=True)
+    is_confirmed=models.BooleanField(default=False)
 
 
 class FriendList(models.Model):

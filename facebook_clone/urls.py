@@ -32,10 +32,13 @@ def landing_page(request):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', landing_page, name='landing-page'),
     path('accounts/', include('accounts.urls')),
     path('posts/', include('posts.urls')),
     path('messages/',include('messages_app.urls')),
+    path('api/',include('api.urls')),
+
+
+    path('', landing_page, name='landing-page'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
