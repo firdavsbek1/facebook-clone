@@ -2,8 +2,7 @@
 
 Created a Facebook Like
 application.                                                                                                                                
-----------------Concepts included in the Application-----------------
-
+# Project setup
 1. Authentication & Authorization
 2. Complex degree of registeration(signup logic)
 3. Well handled errors from forms(giving hint to user if anything goes wrong)
@@ -17,9 +16,16 @@ application.
 11. Messenger(message_app) is implemented. Message to or messaged by functionality and seeing people with the newest
     message at the top logic is done.
 
+# REST API setup 
+1. JWT authentication(AccessToken,RefreshToken) login,logout,signup,verify token,refresh token.
+2. Sending asynchronous emails(threading) and confirming user against the code sent.
+3. Code resend functionality along with expiration time
+4. Full CRUD on post/comment/message
+5. Toggle Like, Upvote, Down Vote on API requests
+6. All authentication system is built on hand(custom)
 ___
 
-                    Image Based Overview of the project
+                                                    Image Based Overview of the project
 
 ___
 
